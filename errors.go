@@ -1,6 +1,9 @@
 package twiliogo
 
-import "fmt"
+import (
+//	"fmt"
+	"encoding/json"
+)
 
 type Error struct {
 	Description string
@@ -15,10 +18,11 @@ type TwilioError struct {
 	Message  string `json:"message"`
 	Code     int    `json:"code"`
 	MoreInfo string `json:"more_info"`
+	Detail   string `json:"detail"`
 }
 
 func (e TwilioError) Error() string {
-	var message string
+	/*var message string
 
 	message = "Twilio Error, "
 
@@ -32,7 +36,12 @@ func (e TwilioError) Error() string {
 
 	if e.Message != "" {
 		message += ", Message: " + e.Message
+	}*/
+	message, err := json.Marshal(e)
+
+	if err != nil {
+		return "{Invalid json response from Twilio}"
 	}
 
-	return message
+	return string(message)
 }
